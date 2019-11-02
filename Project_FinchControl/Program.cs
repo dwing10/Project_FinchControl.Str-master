@@ -9,11 +9,11 @@ namespace Project_FinchControl
     // **************************************************
     //
     // Title: Finch Control
-    // Description: 
+    // Description: Application to control the Finch Robot
     // Application Type: Console
-    // Author: 
-    // Dated Created: 
-    // Last Modified: 
+    // Author: Devin Wing
+    // Dated Created: 10/1/2019
+    // Last Modified: 11/2/2019
     //
     // **************************************************
 
