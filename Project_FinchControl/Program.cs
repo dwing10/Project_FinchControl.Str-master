@@ -236,6 +236,7 @@ namespace Project_FinchControl
                 Console.WriteLine("\tGreen");
                 Console.WriteLine("\tRed");
                 Console.WriteLine("\tBlue");
+                Console.WriteLine("\tMagenta");
                 Console.WriteLine("\tWhite");
                 Console.WriteLine();
 
@@ -254,6 +255,9 @@ namespace Project_FinchControl
                         validResponse = true;
                         break;
                     case "Blue":
+                        validResponse = true;
+                        break;
+                    case "Magenta":
                         validResponse = true;
                         break;
                     case "White":
@@ -943,7 +947,7 @@ namespace Project_FinchControl
                         else
                         {
                             Console.WriteLine();
-                            Console.WriteLine("Please enter a valid temperature.");
+                            Console.WriteLine("\tPlease enter a valid temperature.");
                             DisplayContinuePrompt();
                         }
                         break;
@@ -986,7 +990,7 @@ namespace Project_FinchControl
                         else
                         {
                             Console.WriteLine();
-                            Console.WriteLine("Please enter a valid temperature.");
+                            Console.WriteLine("\tPlease enter a valid temperature.");
                             DisplayContinuePrompt();
                         }
                         break;
@@ -1181,6 +1185,7 @@ namespace Project_FinchControl
 
             do
             {
+                Console.Clear();
                 DisplayScreenHeader("Finch Robot Data Recorder");
                 Console.WriteLine();
                 Console.WriteLine("\tWelcome to the data recorder.");
@@ -1190,14 +1195,15 @@ namespace Project_FinchControl
                 Console.WriteLine("\tthe number of times (data points) you");
                 Console.WriteLine("\twish me to collect data.");
                 Console.WriteLine();
-                Console.WriteLine("\tEnter temp to get the temperature.");
+                Console.WriteLine("\tEnter temperature to get temperature data.");
                 Console.WriteLine();
                 Console.WriteLine("\tEnter light to get light sensor information.");
+                Console.WriteLine();
                 userChoice = Console.ReadLine().ToLower();
 
                 switch (userChoice)
                 {
-                    case "temp":
+                    case "temperature":
                     case "light":
                         validResponse = true;
                         break;
@@ -1206,14 +1212,17 @@ namespace Project_FinchControl
                         break;
 
                 }
+
+                Console.WriteLine();
                 DisplayContinuePrompt();
+
             } while (!validResponse);
 
 
 
             if (validResponse)
             {
-                if (userChoice == "temp")
+                if (userChoice == "temperature")
                 {
                     dataPointFrequency = DisplayGetDataPointFrequency();
                     numberOfDataPoints = DisplayGetNumberOfDataPoints();
@@ -1252,6 +1261,7 @@ namespace Project_FinchControl
             for (int i = 0; i < light.Length; i++)
             {
                 Console.WriteLine($"\tLight Recordings: {i + 1}: {light[i]}");
+                Console.WriteLine();
             }
 
         }
@@ -1262,8 +1272,10 @@ namespace Project_FinchControl
         private static void DisplayGetLightData(double dataPointFrequencyLight, double numberOfDataPointsLight, double[] light, Finch finchRobot)
         {
             DisplayScreenHeader("Get Light Recordings");
-
-            //give user info and prompt
+            Console.WriteLine();
+            Console.WriteLine("\tI will now gather LIGHT DATA. ");
+            Console.WriteLine();
+            DisplayContinuePrompt();
 
             for (int i = 0; i < numberOfDataPointsLight; i++)
             {
@@ -1275,6 +1287,7 @@ namespace Project_FinchControl
                 Console.WriteLine($"\tLight Recordings: {i + 1}: {light[i]}");
             }
 
+            Console.WriteLine();
             DisplayContinuePrompt();
         }
 
@@ -1284,14 +1297,33 @@ namespace Project_FinchControl
         private static int DisplayGetNumberOfPointsLight()
         {
             int numberOfDataPointsLight;
+            bool validResponse = false;
+            string userResponse;
 
-            DisplayScreenHeader("Number of Data Points");
+            do
+            {
+                Console.Clear();
+                DisplayScreenHeader("Number of Data Points");
 
-            //ask user for number of data points
-            Console.WriteLine();
-            Console.Write("\tEnter the number of data points: ");
-            int.TryParse(Console.ReadLine(), out numberOfDataPointsLight);
-            Console.WriteLine();
+                Console.WriteLine();
+                Console.Write("\tEnter the number of data points: ");
+                Console.WriteLine();
+                userResponse = Console.ReadLine();
+
+                if (int.TryParse(userResponse, out numberOfDataPointsLight) && numberOfDataPointsLight > 0)
+                {
+                    validResponse = true;
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("\tENTER THE NUMBER OF DATAPOINTS AS AN INTEGER GREATER THAN ZERO.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                }
+
+            } while (!validResponse);
+
 
             DisplayContinuePrompt();
 
@@ -1303,15 +1335,36 @@ namespace Project_FinchControl
         /// </summary>
         static double DisplayGetFrequencyForLight()
         {
+            string userResponse;
+            bool validResponse = false;
             double dataPointFrequencyLight;
 
-            DisplayScreenHeader("Data Point Frequency");
 
-            //get frequency
-            Console.WriteLine();
-            Console.Write("\tEnter frequency of light recordings in seconds: ");
-            double.TryParse(Console.ReadLine(), out dataPointFrequencyLight);
-            Console.WriteLine();
+
+            do
+            {
+                Console.Clear();
+                DisplayScreenHeader("Data Point Frequency");
+
+                Console.WriteLine();
+                Console.Write("\tEnter frequency of light recordings in seconds: ");
+                Console.WriteLine();
+                userResponse = Console.ReadLine();
+
+                if (double.TryParse(userResponse, out dataPointFrequencyLight) && dataPointFrequencyLight > 0)
+                {
+                    validResponse = true;
+                }
+
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("\tENTER FREQUENCY AS AN INTEGER GREATER THAN ZERO.");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                }
+
+            } while (!validResponse);
 
             DisplayContinuePrompt();
 
@@ -1324,10 +1377,12 @@ namespace Project_FinchControl
         static void DisplayData(double[] temperatures)
         {
             DisplayScreenHeader("Temperatures");
+            Console.WriteLine();
 
             for (int i = 0; i < temperatures.Length; i++)
             {
-                Console.WriteLine($"Temperatures: {i + 1}: {temperatures[i]}");
+                Console.WriteLine($"\tTemperatures: {i + 1}: {temperatures[i]} degrees Celsius");
+                Console.WriteLine();
             }
 
         }
@@ -1337,11 +1392,13 @@ namespace Project_FinchControl
         /// </summary>
         static void DisplayGetData(int numberOfDataPoints, double dataPointFrequency, double[] temperatures, Finch finchRobot)
         {
-            DisplayScreenHeader("Get Temperatures");
-
             int tempF;
 
-            //give user info and prompt
+            DisplayScreenHeader("Get Temperatures");
+            Console.WriteLine();
+            Console.WriteLine("\tI will now gather TEMPERATURE DATA. ");
+            Console.WriteLine();
+            DisplayContinuePrompt();
 
             for (int i = 0; i < numberOfDataPoints; i++)
             {
@@ -1355,6 +1412,8 @@ namespace Project_FinchControl
                 Console.WriteLine();
                 Console.WriteLine($"\tTemperatures (Fahrenheit): {i + 1}: {tempF}");
             }
+
+            Console.WriteLine();
             DisplayContinuePrompt();
 
         }
@@ -1364,16 +1423,36 @@ namespace Project_FinchControl
         /// </summary>
         static int DisplayGetNumberOfDataPoints()
         {
+            bool validResponse = false;
             int numberOfDataPoints;
+            string userResponse;
 
-            DisplayScreenHeader("Number of Data Points");
+            do
+            {
+                Console.Clear();
+                DisplayScreenHeader("Number of Data Points");
 
-            //ask user for number of data points
+                Console.WriteLine();
+                Console.Write("\tEnter the number of data points: ");
+                Console.WriteLine();
+                userResponse = Console.ReadLine();
+
+                if (int.TryParse(userResponse, out numberOfDataPoints) && numberOfDataPoints > 0)
+                {
+                    validResponse = true;
+                }
+
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("\tENTER NUMBER OF DATA POINTS AS AN INTEGER GREATER THAN ZERO");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                }
+
+            } while (!validResponse);
+
             Console.WriteLine();
-            Console.Write("\tEnter the number of data points: ");
-            int.TryParse(Console.ReadLine(), out numberOfDataPoints);
-            Console.WriteLine();
-
             DisplayContinuePrompt();
 
             return numberOfDataPoints;
@@ -1384,15 +1463,32 @@ namespace Project_FinchControl
         /// </summary>
         static double DisplayGetDataPointFrequency()
         {
+            bool validResponse = false;
             double dataPointFrequency;
+            string userResponse;
 
-            DisplayScreenHeader("Data Point Frequency");
+            do
+            {
+                Console.Clear();
+                DisplayScreenHeader("Data Point Frequency");
+                Console.WriteLine();
+                Console.Write("\tEnter frequency of temperature recordings in seconds: ");
+                Console.WriteLine();
+                userResponse = Console.ReadLine();
 
-            //get frequency
-            Console.WriteLine();
-            Console.Write("\tEnter frequency of temperature recordings in seconds: ");
-            double.TryParse(Console.ReadLine(), out dataPointFrequency);
-            Console.WriteLine();
+                if (double.TryParse(userResponse, out dataPointFrequency) && dataPointFrequency > 0)
+                {
+                    validResponse = true;
+                }
+
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("\tENTER FREQUENCY AS AN INTEGER GREATER THAN ZERO");
+                    Console.WriteLine();
+                    DisplayContinuePrompt();
+                }
+            } while (!validResponse);
 
             DisplayContinuePrompt();
 
@@ -1741,6 +1837,8 @@ namespace Project_FinchControl
 
             finchRobot.disConnect();
 
+            Console.Clear();
+            DisplayScreenHeader("Diconnect Finch Robot");
             Console.WriteLine();
             Console.WriteLine("\tFinch Robot is now disconnected.");
 
@@ -1759,6 +1857,8 @@ namespace Project_FinchControl
             Console.WriteLine();
             Console.WriteLine("\tReady to connect to the Finch Robot. Please be sure to connect the USB cable from the robot to the computer.");
             DisplayContinuePrompt();
+            Console.Clear();
+            DisplayScreenHeader("Connect Finch Robot");
 
             finchRobotConnected = finchRobot.connect();
 

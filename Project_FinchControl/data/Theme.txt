@@ -1,4 +1,5 @@
 ﻿Green
 Red
 Blue
+Magenta
 White
